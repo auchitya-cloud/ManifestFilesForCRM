@@ -22,11 +22,11 @@ data:
           - targets: ['node-exporter:9100']
         scrape_interval: 15s
 
-      # Container Metrics - cAdvisor
-      - job_name: 'cadvisor'
-        static_configs:
-          - targets: ['cadvisor:8080']
-        scrape_interval: 15s
+      # Container Metrics - cAdvisor (removed - not needed)
+      # - job_name: 'cadvisor'
+      #   static_configs:
+      #     - targets: ['cadvisor:8080']
+      #   scrape_interval: 15s
 
       # Kubernetes API Server Metrics
       - job_name: 'kubernetes-apiservers'

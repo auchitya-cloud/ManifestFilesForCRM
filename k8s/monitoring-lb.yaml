@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grafana-lb
-  namespace: auchitya-platform
+  namespace: team-namespace
   labels:
     app: grafana
 spec:
@@ -21,7 +21,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: prometheus-lb
-  namespace: auchitya-platform
+  namespace: team-namespace
   labels:
     app: prometheus
 spec:

@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: prometheus-config
-  namespace: auchitya-platform
+  namespace: team-namespace
 data:
   prometheus.yml: |
     global:
@@ -68,7 +68,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: prometheus
-  namespace: auchitya-platform
+  namespace: team-namespace
   labels:
     app: prometheus
 spec:
@@ -117,7 +117,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: prometheus-service
-  namespace: auchitya-platform
+  namespace: team-namespace
   labels:
     app: prometheus
 spec:
@@ -135,7 +135,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-datasources
-  namespace: auchitya-platform
+  namespace: team-namespace
 data:
   prometheus.yaml: |-
     {
@@ -159,7 +159,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grafana
-  namespace: auchitya-platform
+  namespace: team-namespace
   labels:
     app: grafana
 spec:
@@ -224,7 +224,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: grafana
-  namespace: auchitya-platform
+  namespace: team-namespace
   labels:
     app: grafana
 spec:

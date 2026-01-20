@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: order-service
-  namespace: auchitya-platform
+  namespace: team-namespace
 spec:
   replicas: 1
   selector:
@@ -24,7 +24,7 @@ spec:
         - containerPort: 8080
         env:
         - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-          value: "kafka.auchitya-platform.svc.cluster.local:9092"
+          value: "kafka.team-namespace.svc.cluster.local:9092"
         - name: LOGGING_CONFIG
           value: "/config/logback-spring.xml"
         - name: SERVICE_NAME
@@ -58,7 +58,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: payment-service
-  namespace: auchitya-platform
+  namespace: team-namespace
 spec:
   replicas: 1
   selector:
@@ -79,7 +79,7 @@ spec:
         - containerPort: 8081
         env:
         - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-          value: "kafka.auchitya-platform.svc.cluster.local:9092"
+          value: "kafka.team-namespace.svc.cluster.local:9092"
         - name: LOGGING_CONFIG
           value: "/config/logback-spring.xml"
         - name: SERVICE_NAME
@@ -113,7 +113,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: stock-service
-  namespace: auchitya-platform
+  namespace: team-namespace
 spec:
   replicas: 1
   selector:
@@ -134,7 +134,7 @@ spec:
         - containerPort: 8082
         env:
         - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
-          value: "kafka.auchitya-platform.svc.cluster.local:9092"
+          value: "kafka.team-namespace.svc.cluster.local:9092"
         - name: LOGGING_CONFIG
           value: "/config/logback-spring.xml"
         - name: SERVICE_NAME

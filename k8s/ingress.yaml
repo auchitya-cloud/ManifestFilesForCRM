@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: auchitya-ingress
-  namespace: auchitya-platform
+  namespace: team-namespace
 spec:
   ingressClassName: nginx
   rules:
@@ -50,7 +50,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: prometheus-ingress
-  namespace: auchitya-platform
+  namespace: team-namespace
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/priority: "100"
@@ -79,7 +79,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: grafana-ingress
-  namespace: auchitya-platform
+  namespace: team-namespace
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/priority: "100"
@@ -108,7 +108,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: health-order
-  namespace: auchitya-platform
+  namespace: team-namespace
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /actuator/health
 spec:
@@ -129,7 +129,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: health-payment
-  namespace: auchitya-platform
+  namespace: team-namespace
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /actuator/health
 spec:
@@ -150,7 +150,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: health-stock
-  namespace: auchitya-platform
+  namespace: team-namespace
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /actuator/health
 spec:

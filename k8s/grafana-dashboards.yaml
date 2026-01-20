@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-dashboards
-  namespace: auchitya-platform
+  namespace: team-namespace
 data:
   infrastructure-dashboard.json: |
     {

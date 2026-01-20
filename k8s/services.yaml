@@ -41,6 +41,10 @@ spec:
             port: 8080
           initialDelaySeconds: 60
           periodSeconds: 10
+      volumes:
+      - name: logging-config
+        configMap:
+          name: logging-config
 ---
 apiVersion: v1
 kind: Service

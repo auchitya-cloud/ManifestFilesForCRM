@@ -10,26 +10,42 @@ data:
       evaluation_interval: 15s
 
     scrape_configs:
-      - job_name: kubernetes-pods
-        kubernetes_sd_configs:
-          - role: pod
 
-        relabel_configs:
-          # Scrape only pods with prometheus.io/scrape = true
-          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
-            action: keep
-            regex: "true"
+    # ==============================
+    # Scrape ONLY annotated pods
+    # (Spring Boot microservices)
+    # ==============================
+    - job_name: "kubernetes-pods"
+      kubernetes_sd_configs:
+        - role: pod
 
-          # Use metrics path from annotation (e.g. /actuator/prometheus)
-          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
-            action: replace
-            target_label: __metrics_path__
-            regex: (.+)
+      relabel_configs:
 
-          # Build address as POD_IP:PORT from annotations
-          - source_labels:
-              - __meta_kubernetes_pod_ip
-              - __meta_kubernetes_pod_annotation_prometheus_io_port
-            separator: ":"
-            action: replace
-            target_label: __address__
+        # 1️⃣ Only keep pods that have prometheus.io/scrape = true
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: "true"
+
+        # 2️⃣ Build target as POD_IP:PORT from annotation
+        - source_labels:
+            - __meta_kubernetes_pod_ip
+            - __meta_kubernetes_pod_annotation_prometheus_io_port
+          separator: ":"
+          target_label: __address__
+          action: replace
+
+        # 3️⃣ Use metrics path from annotation (Spring Boot uses /actuator/prometheus)
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          target_label: __metrics_path__
+          action: replace
+          regex: (.+)
+
+        # 4️⃣ Add useful labels for Grafana
+        - source_labels: [__meta_kubernetes_namespace]
+          target_label: namespace
+
+        - source_labels: [__meta_kubernetes_pod_name]
+          target_label: pod
+
+        - source_labels: [__meta_kubernetes_pod_label_app]
+          target_label: app

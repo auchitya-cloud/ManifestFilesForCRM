@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: observability
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+
+    scrape_configs:
+
+    # ==============================
+    # Scrape ONLY annotated pods
+    # (Spring Boot microservices)
+    # ==============================
+    - job_name: "kubernetes-pods"
+      kubernetes_sd_configs:
+        - role: pod
+
+      relabel_configs:
+
+        # 1️⃣ Only keep pods that have prometheus.io/scrape = true
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+          action: keep
+          regex: "true"
+
+        # 2️⃣ Build target as POD_IP:PORT from annotation
+        - source_labels:
+            - __meta_kubernetes_pod_ip
+            - __meta_kubernetes_pod_annotation_prometheus_io_port
+          separator: ":"
+          target_label: __address__
+          action: replace
+
+        # 3️⃣ Use metrics path from annotation (Spring Boot uses /actuator/prometheus)
+        - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+          target_label: __metrics_path__
+          action: replace
+          regex: (.+)
+
+        # 4️⃣ Add useful labels for Grafana
+        - source_labels: [__meta_kubernetes_namespace]
+          target_label: namespace
+
+        - source_labels: [__meta_kubernetes_pod_name]
+          target_label: pod
+
+        - source_labels: [__meta_kubernetes_pod_label_app]
+          target_label: app

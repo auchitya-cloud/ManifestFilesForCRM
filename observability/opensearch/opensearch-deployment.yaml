@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opensearch
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opensearch
+  template:
+    metadata:
+      labels:
+        app: opensearch
+    spec:
+      # Fix for EBS permission issue
+      securityContext:
+        fsGroup: 1000
+
+      containers:
+      - name: opensearch
+        image: opensearchproject/opensearch:2.11.1
+        imagePullPolicy: IfNotPresent
+
+        ports:
+        - containerPort: 9200
+
+        env:
+        - name: discovery.type
+          value: single-node
+        - name: plugins.security.disabled
+          value: "true"
+
+        volumeMounts:
+        - name: opensearch-storage
+          mountPath: /usr/share/opensearch/data
+
+      volumes:
+      - name: opensearch-storage
+        persistentVolumeClaim:
+          claimName: opensearch-pvc

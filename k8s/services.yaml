@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: order-service
-        image: 331867785866.dkr.ecr.us-east-1.amazonaws.com/intern-project/order-service:9
+        image: 331867785866.dkr.ecr.us-east-1.amazonaws.com/intern-project/order-service:18
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -76,7 +76,7 @@ spec:
     spec:
       containers:
       - name: payment-service
-        image: 331867785866.dkr.ecr.us-east-1.amazonaws.com/intern-project/payment-service:9
+        image: 331867785866.dkr.ecr.us-east-1.amazonaws.com/intern-project/payment-service:18
         imagePullPolicy: Always
         ports:
         - containerPort: 8081
@@ -127,7 +127,7 @@ spec:
     spec:
       containers:
       - name: stock-service
-        image: 331867785866.dkr.ecr.us-east-1.amazonaws.com/intern-project/stock-service:9
+        image: 331867785866.dkr.ecr.us-east-1.amazonaws.com/intern-project/stock-service:18
         imagePullPolicy: Always
         ports:
         - containerPort: 8082
@@ -178,7 +178,7 @@ spec:
     spec:
       containers:
       - name: demo-ui
-        image: 331867785866.dkr.ecr.us-east-1.amazonaws.com/intern-project/demo-ui:team-namespace
+        image: 331867785866.dkr.ecr.us-east-1.amazonaws.com/intern-project/demo-ui:18
         imagePullPolicy: Always
         ports:
         - containerPort: 80

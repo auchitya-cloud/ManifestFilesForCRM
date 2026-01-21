@@ -1,0 +1,17 @@
+singleNode: true
+
+opensearchJavaOpts: "-Xms256m -Xmx256m"
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+persistence:
+  enabled: false
+
+securityConfig:
+  enabled: false

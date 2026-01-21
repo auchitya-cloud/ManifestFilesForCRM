@@ -12,8 +12,15 @@ data:
     [INPUT]
         Name          tail
         Path          /var/log/containers/*.log
-        Parser        docker
+        Parser        cri
         Tag           kube.*
+
+    [PARSER]
+        Name        cri
+        Format      regex
+        Regex       ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z
 
     [OUTPUT]
         Name            opensearch
@@ -25,5 +32,3 @@ data:
         Logstash_Prefix kubernetes
         Suppress_Type_Name On
         Replace_Dots    On
-
-

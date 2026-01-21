@@ -13,6 +13,10 @@ spec:
     metadata:
       labels:
         app: order-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
       - name: order-service
@@ -45,18 +49,7 @@ spec:
       - name: logging-config
         configMap:
           name: logging-config
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: order-service
-  namespace: team-namespace
-spec:
-  selector:
-    app: order-service
-  ports:
-  - port: 8080
-    targetPort: 8080
+
 ---
 # Payment Service
 apiVersion: apps/v1
@@ -73,6 +66,10 @@ spec:
     metadata:
       labels:
         app: payment-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
       - name: payment-service
@@ -96,18 +93,7 @@ spec:
             port: 8081
           initialDelaySeconds: 60
           periodSeconds: 10
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: payment-service
-  namespace: team-namespace
-spec:
-  selector:
-    app: payment-service
-  ports:
-  - port: 8081
-    targetPort: 8081
+
 ---
 # Stock Service
 apiVersion: apps/v1
@@ -124,6 +110,10 @@ spec:
     metadata:
       labels:
         app: stock-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8082"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
       - name: stock-service
@@ -147,18 +137,7 @@ spec:
             port: 8082
           initialDelaySeconds: 60
           periodSeconds: 10
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: stock-service
-  namespace: team-namespace
-spec:
-  selector:
-    app: stock-service
-  ports:
-  - port: 8082
-    targetPort: 8082
+
 ---
 # Demo UI
 apiVersion: apps/v1

@@ -15,27 +15,46 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
+
       containers:
       - name: opensearch
         image: opensearchproject/opensearch:2.11.1
-        imagePullPolicy: IfNotPresent
 
         ports:
         - containerPort: 9200
         - containerPort: 9300
 
         env:
-        # This MUST be a JVM option (this is the missing piece)
-        - name: OPENSEARCH_JAVA_OPTS
-          value: "-Xms512m -Xmx512m -Ddiscovery.type=single-node"
+        # Node identity
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
 
-        # Disable security cleanly
+        - name: cluster.name
+          value: "docker-cluster"
+
+        # SINGLE NODE MODE (THIS is what stops bootstrap check)
+        - name: discovery.seed_hosts
+          value: "127.0.0.1"
+        - name: cluster.initial_cluster_manager_nodes
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+
+        # Disable security
+        - name: plugins.security.disabled
+          value: "true"
         - name: DISABLE_SECURITY_PLUGIN
           value: "true"
         - name: OPENSEARCH_SECURITY_DISABLED
           value: "true"
         - name: DISABLE_INSTALL_DEMO_CONFIG
           value: "true"
+
+        # JVM memory
+        - name: OPENSEARCH_JAVA_OPTS
+          value: "-Xms512m -Xmx512m"
 
         volumeMounts:
         - name: opensearch-storage

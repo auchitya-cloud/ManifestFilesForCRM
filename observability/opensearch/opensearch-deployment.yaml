@@ -15,43 +15,36 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
-
       containers:
       - name: opensearch
         image: opensearchproject/opensearch:2.11.1
+        imagePullPolicy: IfNotPresent
 
         ports:
         - containerPort: 9200
         - containerPort: 9300
 
         env:
-        # Node identity
+        # required for k8s
         - name: node.name
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
 
         - name: cluster.name
-          value: "docker-cluster"
+          value: "opensearch"
 
-        # SINGLE NODE MODE (THIS is what stops bootstrap check)
-        - name: discovery.seed_hosts
-          value: "127.0.0.1"
-        - name: cluster.initial_cluster_manager_nodes
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
+        # CRITICAL: tells OpenSearch this is dev mode
+        - name: discovery.type
+          value: "single-node"
 
-        # Disable security
-        
-        - name: DISABLE_SECURITY_PLUGIN
-          value: "true"
-        - name: OPENSEARCH_SECURITY_DISABLED
-          value: "true"
+        # disable security cleanly
         - name: DISABLE_INSTALL_DEMO_CONFIG
           value: "true"
+        - name: DISABLE_SECURITY_PLUGIN
+          value: "true"
 
-        # JVM memory
+        # memory
         - name: OPENSEARCH_JAVA_OPTS
           value: "-Xms512m -Xmx512m"
 

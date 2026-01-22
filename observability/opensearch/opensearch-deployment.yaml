@@ -15,34 +15,31 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
-
       containers:
       - name: opensearch
-      image: opensearchproject/opensearch:2.11.1
+        image: opensearchproject/opensearch:2.11.1
+        imagePullPolicy: IfNotPresent
 
-      ports:
+        ports:
         - containerPort: 9200
-        - containerPort: 9600
+        - containerPort: 9300
 
-      env:
-        - name: discovery.type
-          value: single-node
+        env:
+        # This MUST be a JVM option (this is the missing piece)
         - name: OPENSEARCH_JAVA_OPTS
-          value: "-Xms1g -Xmx1g"
+          value: "-Xms512m -Xmx512m -Ddiscovery.type=single-node"
 
-      command:
-        - "/usr/share/opensearch/bin/opensearch"
+        # Disable security cleanly
+        - name: DISABLE_SECURITY_PLUGIN
+          value: "true"
+        - name: OPENSEARCH_SECURITY_DISABLED
+          value: "true"
+        - name: DISABLE_INSTALL_DEMO_CONFIG
+          value: "true"
 
-      args:
-        - "-E"
-        - "plugins.security.disabled=true"
-        - "-E"
-        - "network.host=0.0.0.0"
-
-      volumeMounts:
+        volumeMounts:
         - name: opensearch-storage
           mountPath: /usr/share/opensearch/data
-
 
       volumes:
       - name: opensearch-storage

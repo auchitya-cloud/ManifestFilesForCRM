@@ -5,36 +5,56 @@ metadata:
   namespace: observability
 spec:
   replicas: 1
-
   strategy:
     type: Recreate
+
   selector:
     matchLabels:
       app: prometheus
+
   template:
     metadata:
       labels:
         app: prometheus
+
     spec:
       serviceAccountName: prometheus
+
+      # 🔧 This fixes the EBS permission problem
+      initContainers:
+      - name: fix-permissions
+        image: busybox
+        command:
+          - sh
+          - -c
+          - "chown -R 65534:65534 /prometheus"
+        volumeMounts:
+        - name: storage
+          mountPath: /prometheus
+
       containers:
       - name: prometheus
         image: prom/prometheus:v2.52.0
+
         args:
-        - "--config.file=/etc/prometheus/prometheus.yml"  #where scrape rules live
-        - "--storage.tsdb.path=/prometheus"  #where metrics are stored on disk
-        - "--storage.tsdb.retention.time=15d" #how long data is kept , here 15 days.
+          - "--config.file=/etc/prometheus/prometheus.yml"
+          - "--storage.tsdb.path=/prometheus"
+          - "--storage.tsdb.retention.time=15d"
+
         ports:
         - containerPort: 9090
-        volumeMounts: #“Prometheus stores metrics on disk, so I mounted a Persistent Volume at /prometheus.”
+
+        volumeMounts:
         - name: config
-          mountPath: /etc/prometheus #config file path
+          mountPath: /etc/prometheus
         - name: storage
-          mountPath: /prometheus #data storage path
+          mountPath: /prometheus
+
       volumes:
       - name: config
         configMap:
           name: prometheus-config
+
       - name: storage
         persistentVolumeClaim:
           claimName: prometheus-pvc

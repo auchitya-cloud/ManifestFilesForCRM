@@ -43,8 +43,7 @@ spec:
               fieldPath: metadata.name
 
         # Disable security
-        - name: plugins.security.disabled
-          value: "true"
+        
         - name: DISABLE_SECURITY_PLUGIN
           value: "true"
         - name: OPENSEARCH_SECURITY_DISABLED

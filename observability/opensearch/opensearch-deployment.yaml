@@ -30,6 +30,10 @@ spec:
           value: single-node
         - name: plugins.security.disabled
           value: "true"
+        - name: DISABLE_SECURITY_PLUGIN
+          value: "true"
+        - name: OPENSEARCH_SECURITY_DISABLED
+          value: "true"
 
         volumeMounts:
         - name: opensearch-storage

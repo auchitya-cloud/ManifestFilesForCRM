@@ -18,27 +18,31 @@ spec:
 
       containers:
       - name: opensearch
-        image: opensearchproject/opensearch:2.11.1
-        imagePullPolicy: IfNotPresent
+      image: opensearchproject/opensearch:2.11.1
 
-        ports:
+      ports:
         - containerPort: 9200
         - containerPort: 9600
 
-        env:
+      env:
         - name: discovery.type
           value: single-node
         - name: OPENSEARCH_JAVA_OPTS
           value: "-Xms1g -Xmx1g"
 
-        command:
-        - "opensearch"
+      command:
+        - "/usr/share/opensearch/bin/opensearch"
+
+      args:
         - "-E"
         - "plugins.security.disabled=true"
+        - "-E"
+        - "network.host=0.0.0.0"
 
-        volumeMounts:
+      volumeMounts:
         - name: opensearch-storage
           mountPath: /usr/share/opensearch/data
+
 
       volumes:
       - name: opensearch-storage

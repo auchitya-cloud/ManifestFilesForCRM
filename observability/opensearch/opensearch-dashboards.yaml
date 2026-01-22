@@ -16,10 +16,18 @@ spec:
       containers:
       - name: dashboards
         image: opensearchproject/opensearch-dashboards:2.11.1
+
         ports:
         - containerPort: 5601
+
         env:
         - name: OPENSEARCH_HOSTS
           value: '["http://opensearch:9200"]'
-        - name: DISABLE_SECURITY_DASHBOARDS_PLUGIN
-          value: "true"
+
+        command:
+        - /usr/share/opensearch-dashboards/bin/opensearch-dashboards
+
+        args:
+        - "--opensearch.hosts=http://opensearch:9200"
+        - "--opensearch.security.enabled=false"
+        - "--server.host=0.0.0.0"
